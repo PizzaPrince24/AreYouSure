@@ -158,6 +158,9 @@ public class Window extends JFrame implements ActionListener{
 		Person Fausto = new Person("Fausto Kang");
 		people.add(Fausto);
 		
+		Person Garrett = new Person("Garrett Stilinovich");
+		people.add(Garrett);
+		
 		Person Gina = new Person("Gina LeRow");
 		people.add(Gina);
 		
@@ -248,7 +251,6 @@ public class Window extends JFrame implements ActionListener{
 	    
 	    panel.add(signIn);
 	    panel.add(signOut);
-	    panel.add(read);
 	    panel.add(signOutAll);
 		panel.add(scrollPane);
 	    
@@ -257,62 +259,31 @@ public class Window extends JFrame implements ActionListener{
 	    setLocationRelativeTo(null);
 	    setVisible(true);
 	    
-	    csv = new CSV();
+	    csv = new CSV(names);
+	    
+	    long timer = System.currentTimeMillis();
+	    
+	    while(true) {
+	    	timer++;
+	    	if(timer - System.currentTimeMillis() >= 100000000) {
+	    		signOutAll();
+	    		timer = System.currentTimeMillis();
+	    		
+	    	}
+	    }
+	    
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if((e.getSource()==signIn || e.getSource()==signOut) && list.getSelectedValue() != null) {
-			confirm = new JFrame();
-			conp = new JPanel(null);
-			
-			confirm.setSize(600,300);
-			confirm.setLocationRelativeTo(null);
-			this.setFocusable(false);
-			
-			cancel = new JButton("Cancel");
-			cancel.setFont(new Font("arial", 1, 40));
-			cancel.setSize(225,100);
-			cancel.setLocation(50,125);
-			cancel.setFocusable(false);
-			cancel.addActionListener(this);
-			conp.add(cancel);
-			
-			ok = new JButton("Confirm");
-			ok.setFont(new Font("arial", 1, 40));
-			ok.setSize(225,100);
-			ok.setLocation(325,125);
-			ok.setFocusable(false);
-			ok.addActionListener(this);
-			conp.add(ok);
-			
-			mes = new JLabel("Are you sure?");
-			mes.setFont(new Font("arial", 0, 30));
-			mes.setSize(600,100);
-			mes.setLocation(200,0);
-			mes.setFocusable(false);
-			conp.add(mes);
-			
-			confirm.add(conp);
-			
-			confirm.setVisible(true);
-			SwingUtilities.updateComponentTreeUI(this);
-			if(e.getSource()==signIn) {
-				in = true;
-			} else {
-				in = false;
-			}
-		}
-		
-		if(e.getSource()==ok && in==true) {
+		if(e.getSource()==signIn && list.getSelectedValue() != null) {
 			people.get(names.indexOf(list.getSelectedValue())).signIn();
-			confirm.dispose();
 		}
-		
-		if(e.getSource()==ok && in==false) {
+		if(e.getSource()==signOut && list.getSelectedValue() != null) {
 			people.get(names.indexOf(list.getSelectedValue())).signOut();
-			csv.writeFile(people);
-			confirm.dispose();
+			people.get(names.indexOf(list.getSelectedValue())).changeSignOut();
+			csv.write(people);
+
 		}
 		
 		if(e.getSource()==read) {
@@ -330,7 +301,6 @@ public class Window extends JFrame implements ActionListener{
 		    fileList.setFont(new Font("arial", 0, 30));
 		    scrollFiles.setLocation(350,20);
 		    scrollFiles.setSize(400,400);
-		    
 		    readFiles = new JButton("Read File");
 		    readFiles.setFont(new Font("arial", 1, 40));
 			readFiles.setSize(300,150);
@@ -603,9 +573,6 @@ public class Window extends JFrame implements ActionListener{
 			readFrame.add(readPanel);
 			readFrame.setVisible(true);
 		}
-		if(e.getSource()==cancel) {
-			confirm.dispose();
-		}
 		if(e.getSource()==readBack) {
 			dateFrame.dispose();
 		}
@@ -646,15 +613,21 @@ public class Window extends JFrame implements ActionListener{
 			SwingUtilities.updateComponentTreeUI(this);
 		}
 		if(e.getSource()==signOutAllOK) {
-			for(int i = 0; i < people.size(); i++) {
-				people.get(i).signOut();
-			}
-			csv.writeFile(people);
+			signOutAll();
 			signOutAllFrame.dispose();
 		}
 		if(e.getSource()==signOutAllBack) {
 			signOutAllFrame.dispose();
 		}
+	}
+	
+	public void signOutAll() {
+		for(int i = 0; i < people.size(); i++) {
+			if(people.get(i).hasSignedOut() == false) {
+				people.get(i).signOut();
+			}
+		}
+		csv.write(people);
 	}
 	public void addNames() {
 		for(int i = 0; i < people.size(); i++) {

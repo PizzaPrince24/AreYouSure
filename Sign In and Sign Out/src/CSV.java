@@ -1,12 +1,24 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -21,8 +33,13 @@ public class CSV {
 	private File directory;
 	private FileReader readingFile;
 	private CSVReader reader;
+	private XSSFWorkbook workbook;
+	private XSSFSheet sheet;
+	private XSSFRow row;
+	private int numRows;
+	private boolean hasWritten = false;
 	
-	public void nameFile() {
+	public String nameFile() {
 		Calendar c = Calendar.getInstance();
 		String day = "" + c.get(Calendar.DAY_OF_MONTH);
 		if(day.length() == 1) {
@@ -34,7 +51,8 @@ public class CSV {
 		}
 		String year = "" + c.get(Calendar.YEAR);
 		
-		fileName = month + "_" + day + "_" + year;
+		fileName = month + "/" + day + "/" + year;
+		return fileName;
 	}
 	
 	public void createFile() {
@@ -76,12 +94,159 @@ public class CSV {
 		
 	}
 	
-	public CSV() {
+	public CSV(ArrayList<String> people) {
 		times = new ArrayList<String[]>();
 		String[] header = {"Name","Hours","Minutes"};
 		times.add(header);
+		
+		file = new File(System.getProperty("user.dir") + "\\Attendance.xlsx");
+		try {
+			file.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
+		if(file.length() > 100) {
+			try {
+				workbook = new XSSFWorkbook(new FileInputStream(file));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			sheet = workbook.getSheet("Attendance");
+			numRows = sheet.getLastRowNum();
+
+		} else {
+			workbook = new XSSFWorkbook();
+			sheet = workbook.createSheet("Attendance");
+			createFirstRow(people);
+			numRows = sheet.getLastRowNum();
+		}
+		
+	}
+
+	public void createFirstRow(ArrayList<String> names) {
+		row = sheet.createRow(0);
+		Cell cell = row.createCell(0);
+		cell.setCellValue("");
+		
+		for(int i = 1; i <= names.size(); i++) {
+			Cell name = row.createCell(i);
+			name.setCellValue(names.get(i-1));
+		}
+		
+		try {
+			FileOutputStream out = new FileOutputStream(file);
+			workbook.write(out);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	public void write(ArrayList<Person> people) {
+		double maxMin = 0;
+		for(int i=0; i<people.size();i++) {
+			maxMin = Math.max(maxMin, (people.get(i).getHours()*60) + people.get(i).getMinutes());
+		}
+		
+		Font font = workbook.createFont();
+		font.setColor(IndexedColors.WHITE.index);
+		
+		
+		CellStyle redStyle = sheet.getWorkbook().createCellStyle();
+		redStyle.setFillForegroundColor(IndexedColors.RED.index);
+		redStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		redStyle.setFont(font);
+		
+
+		CellStyle greenStyle = sheet.getWorkbook().createCellStyle();
+		greenStyle.setFillForegroundColor(IndexedColors.GREEN.index);
+		greenStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		greenStyle.setFont(font);
+		
+		if(hasWritten == false) {
+			numRows++;
+			row = sheet.createRow(numRows);
+			
+			int cellId = 0;
+			
+			Cell cell = row.createCell(cellId++);
+			cell.setCellValue(nameFile());
+			
+			
+			
+			for(int i = 0; i < people.size(); i++) {
+				Cell cell1 = row.createCell(cellId++);
+				cell1.setCellValue(people.get(i).getHours() + ":" + people.get(i).getMinutes());
+				double minValue = (people.get(i).getHours()*60) + people.get(i).getMinutes();
+				if(minValue >= (0.7*maxMin)) {
+					cell1.setCellStyle(greenStyle);
+				}else {
+					cell1.setCellStyle(redStyle);
+				}
+			}
+			
+			try {
+				FileOutputStream out = new FileOutputStream(file, false);
+				workbook.write(out);
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			hasWritten = true;
+		} else {
+			int cellId = 0;
+			
+			Cell cell = row.createCell(cellId);
+			cell.setCellValue(nameFile());
+			
+			cellId++;
+			
+			for(int i = 0; i < people.size(); i++) {
+				Cell cell1 = row.createCell(cellId++);
+				cell1.setCellValue(people.get(i).getHours() + ":" + people.get(i).getMinutes());
+				double minValue = (people.get(i).getHours()*60) + people.get(i).getMinutes();
+				if(minValue >= (0.7*maxMin)) {
+					cell1.setCellStyle(greenStyle);
+				}else {
+					cell1.setCellStyle(redStyle);
+				}
+			}
+			
+			try {
+				FileOutputStream out = new FileOutputStream(file);
+				workbook.write(out);
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void updateRows() {
+		try {
+			writer = new CSVWriter(new FileWriter(new File("Attendance.csv")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String[] rowNum = {String.valueOf(numRows)};
+		writer.writeNext(rowNum);
+		try {
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public ArrayList<String> listFiles() {
 		directory = new File(System.getProperty("user.dir"));
 		String[] dir = directory.list();
@@ -94,6 +259,25 @@ public class CSV {
 			}
 		}
 		return files;
+	}
+	
+	public int readRows() {
+		try {
+			readingFile = new FileReader(new String(System.getProperty("user.dir") + "\\Attendance.csv"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		reader = new CSVReader(readingFile);
+		
+		try {
+			return Integer.parseInt(reader.readNext()[0]);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public ArrayList<String> readFile(String filename){

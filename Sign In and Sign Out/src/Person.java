@@ -10,6 +10,7 @@ public class Person {
 	private long timeIn;
 	private long timeOut;
 	private JButton button;
+	private boolean hasSignedOut = false;
 	
 	public Person(String name) {
 		button = new JButton(name);
@@ -50,5 +51,13 @@ public class Person {
 			return 0;
 		}
 		return (int)(((timeOut - timeIn) / 60000) % 60);
+	}
+	
+	public boolean hasSignedOut() {
+		return hasSignedOut;
+	}
+	
+	public void changeSignOut() {
+		hasSignedOut = true;
 	}
 }
