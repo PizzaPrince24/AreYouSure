@@ -110,12 +110,18 @@ public class CSV {
 		if(file.length() > 100) {
 			try {
 				workbook = new XSSFWorkbook(new FileInputStream(file));
+				if(workbook.getSheet("Attendance")!=null) {
+					sheet = workbook.getSheet("Attendance");
+				} else {
+					System.out.println("sheet DNE");
+				}
+				numRows = sheet.getLastRowNum();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			sheet = workbook.getSheet("Attendance");
-			numRows = sheet.getLastRowNum();
+			
+			
 
 		} else {
 			workbook = new XSSFWorkbook();
@@ -124,6 +130,9 @@ public class CSV {
 			numRows = sheet.getLastRowNum();
 		}
 		
+		if(workbook.isHidden()) {
+			System.out.println("test");
+		}
 	}
 
 	public void createFirstRow(ArrayList<String> names) {
@@ -156,6 +165,9 @@ public class CSV {
 		Font font = workbook.createFont();
 		font.setColor(IndexedColors.WHITE.index);
 		
+		if(sheet==null) {
+			System.out.println("sheet is null");
+		}
 		
 		CellStyle redStyle = sheet.getWorkbook().createCellStyle();
 		redStyle.setFillForegroundColor(IndexedColors.RED.index);
@@ -192,6 +204,9 @@ public class CSV {
 			
 			try {
 				FileOutputStream out = new FileOutputStream(file, false);
+				if(workbook==null) {
+					System.out.println("workbook is null");
+				}
 				workbook.write(out);
 				out.close();
 			} catch (FileNotFoundException e) {

@@ -282,6 +282,10 @@ public class Window extends JFrame implements ActionListener{
 		if(e.getSource()==signOut && list.getSelectedValue() != null) {
 			people.get(names.indexOf(list.getSelectedValue())).signOut();
 			people.get(names.indexOf(list.getSelectedValue())).changeSignOut();
+			if(csv==null) {
+				System.out.println("csv is null");
+			}
+			csv = new CSV(names);
 			csv.write(people);
 
 		}
