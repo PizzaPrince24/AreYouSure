@@ -7,6 +7,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/cjm05/git/AreYouSure/Sign In and Sign Out/opencsv-3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cjm05/git/AreYouSure/Sign In and Sign Out/poi-bin-5.2.3-20220909.zip"/>
 	<classpathentry kind="lib" path="C:/Users/cjm05/git/AreYouSure/Sign In and Sign Out/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-5.2.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/cjm05/git/AreYouSure/Sign In and Sign Out/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-examples-5.2.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/cjm05/git/AreYouSure/Sign In and Sign Out/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-excelant-5.2.3.jar"/>
