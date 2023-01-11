@@ -85,14 +85,14 @@ public class Window extends JFrame implements ActionListener{
 		signIn = new JButton("Sign In");
 		signIn.setFont(new Font("arial", 1, 50));
 		signIn.setSize(300,150);
-		signIn.setLocation(200,450);
+		signIn.setLocation(600,50);
 		signIn.setFocusable(false);
 		signIn.addActionListener(this);
 		
 		signOut = new JButton("Sign Out");
 		signOut.setFont(new Font("arial", 1, 50));
 		signOut.setSize(300,150);
-		signOut.setLocation(600,450);
+		signOut.setLocation(600,250);
 		signOut.setFocusable(false);
 		signOut.addActionListener(this);
 		
@@ -106,60 +106,54 @@ public class Window extends JFrame implements ActionListener{
 		signOutAll = new JButton("Sign Out All");
 		signOutAll.setFont(new Font("arial", 1, 40));
 		signOutAll.setSize(300,150);
-		signOutAll.setLocation(760,150);
+		signOutAll.setLocation(600,450);
 		signOutAll.setFocusable(false);
 		signOutAll.addActionListener(this);
 		
 		names = new ArrayList<String>();
 		people = new ArrayList<Person>();
 		
+		Person Aden = new Person("Aden Tan");
+		people.add(Aden);
+		
 		Person Alec = new Person("Alec Levy");
 		people.add(Alec);
 		
-		Person Andres = new Person("Andres Gonzalez");
-		people.add(Andres);
+		Person Autumn = new Person("Autumn Sharon");
+		people.add(Autumn);
 		
 		Person Baron = new Person("Baron Lemus");
 		people.add(Baron);
 		
-		Person Brett = new Person("Brett Gomberg");
-		people.add(Brett);
-		
-		Person Charles = new Person("Charles Villegas");
-		people.add(Charles);
-		
 		Person Colin = new Person("Colin Murnane");
 		people.add(Colin);
-		
-		Person Cooper = new Person("Cooper Tai");
-		people.add(Cooper);
 		
 		Person Corey = new Person("Corey Sims");
 		people.add(Corey);
 		
-		Person DanielM = new Person("Daniel Mastick");
-		people.add(DanielM);
-		
 		Person Daniel = new Person("Daniel Wu");
 		people.add(Daniel);
 		
-		Person David = new Person("David Wilson");
+		Person David = new Person("David Asraf");
 		people.add(David);
 		
 		Person Destry = new Person("Destry Smith");
 		people.add(Destry);
 		
-		Person Dillon = new Person("Dillon Spilker");
-		people.add(Dillon);
+		Person Elise = new Person("Elise Chhour");
+		people.add(Elise);
 		
-		Person Emily = new Person("Emily Gritchen");
-		people.add(Emily);
+		Person Elliot = new Person("Elliot Kang");
+		people.add(Elliot);
 		
 		Person Fausto = new Person("Fausto Kang");
 		people.add(Fausto);
 		
 		Person Garrett = new Person("Garrett Stilinovich");
 		people.add(Garrett);
+		
+		Person Gavin = new Person("Gavin Lee");
+		people.add(Gavin);
 		
 		Person Gina = new Person("Gina LeRow");
 		people.add(Gina);
@@ -170,35 +164,20 @@ public class Window extends JFrame implements ActionListener{
 		Person Greg = new Person("Greg Wong");
 		people.add(Greg);
 		
-		Person Isaiah = new Person("Isaiah Rabon");
-		people.add(Isaiah);
-		
 		Person IsaacL = new Person("Isaac Lee");
 		people.add(IsaacL);
 		
 		Person Isaac = new Person("Isaac Parhami");
 		people.add(Isaac);
 		
-		Person Jaelyn = new Person("Jaelyn Miller");
-		people.add(Jaelyn);
-		
-		Person Jayden = new Person("Jayden Marquez");
-		people.add(Jayden);
+		Person Jamin = new Person("Jamin Ling");
+		people.add(Jamin);
 		
 		Person Jess = new Person("Jess Reid");
 		people.add(Jess);
 		
-		Person Jordan = new Person("Jordan Jameson");
-		people.add(Jordan);
-		
-		Person Juan = new Person("Juan Carrion");
-		people.add(Juan);
-		
 		Person Kai = new Person("Kai Matsumoto");
 		people.add(Kai);
-		
-		Person Kaiden = new Person("Kaiden St. Dennis");
-		people.add(Kaiden);
 		
 		Person Liam = new Person("Liam Fallon");
 		people.add(Liam);
@@ -206,20 +185,14 @@ public class Window extends JFrame implements ActionListener{
 		Person Lon = new Person("Lon Monk");
 		people.add(Lon);
 		
-		Person Nathan = new Person("Nathan Tang");
-		people.add(Nathan);
-		
-		Person Mark = new Person("Mark Maciel");
-		people.add(Mark);
-		
 		Person Matthew = new Person("Matthew Lee");
 		people.add(Matthew);
 		
+		Person Matt = new Person("Matt Cheng");
+		people.add(Matt);
+		
 		Person MichaelL = new Person("Michael Lee");
 		people.add(MichaelL);
-		
-		Person MatthewT = new Person("Matthew Tilley");
-		people.add(MatthewT);
 		
 		Person Max = new Person("Maxwell Murase");
 		people.add(Max);
@@ -227,17 +200,14 @@ public class Window extends JFrame implements ActionListener{
 		Person Mekhi = new Person("Mekhi Yanthis");
 		people.add(Mekhi);
 		
-		Person Michael = new Person("Michael Yoon");
-		people.add(Michael);
+		Person Noah = new Person("Noah Kim");
+		people.add(Noah);
 		
 		Person Samuel = new Person("Samuel Li");
 		people.add(Samuel);
 		
 		Person Sean = new Person("Sean Kelman");
 		people.add(Sean);
-		
-		Person Zach = new Person("Zach Zonni");
-		people.add(Zach);
 		
 		addNames();
 		
@@ -246,8 +216,8 @@ public class Window extends JFrame implements ActionListener{
 		scrollPane = new JScrollPane(list);
 	    list.setLayoutOrientation(JList.VERTICAL);
 	    list.setFont(new Font("arial", 0, 30));
-	    scrollPane.setLocation(350,20);
-	    scrollPane.setSize(400,400);
+	    scrollPane.setLocation(50,30);
+	    scrollPane.setSize(400,600);
 	    
 	    panel.add(signIn);
 	    panel.add(signOut);
@@ -265,7 +235,7 @@ public class Window extends JFrame implements ActionListener{
 	    
 	    while(true) {
 	    	timer++;
-	    	if(timer - System.currentTimeMillis() >= 100000000) {
+	    	if(((timer - System.currentTimeMillis()) / 1000) >= 20000000) {
 	    		signOutAll();
 	    		timer = System.currentTimeMillis();
 	    		
@@ -274,7 +244,6 @@ public class Window extends JFrame implements ActionListener{
 	    
 	}
 	
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==signIn && list.getSelectedValue() != null) {
 			people.get(names.indexOf(list.getSelectedValue())).signIn();
@@ -282,10 +251,6 @@ public class Window extends JFrame implements ActionListener{
 		if(e.getSource()==signOut && list.getSelectedValue() != null) {
 			people.get(names.indexOf(list.getSelectedValue())).signOut();
 			people.get(names.indexOf(list.getSelectedValue())).changeSignOut();
-			if(csv==null) {
-				System.out.println("csv is null");
-			}
-			csv = new CSV(names);
 			csv.write(people);
 
 		}
